@@ -1,0 +1,25 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #020408;
+  height: 100%;
+}
+
+body {
+  background-color: #020408;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+}
+
+#root {
+  background-color: #020408;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}

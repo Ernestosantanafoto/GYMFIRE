@@ -1,0 +1,17 @@
+{
+  "short_name": "GymTracker",
+  "name": "GymTracker — Ernesto",
+  "icons": [
+    {
+      "src": "iconapp.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#020408",
+  "theme_color": "#020408",
+  "orientation": "portrait"
+}

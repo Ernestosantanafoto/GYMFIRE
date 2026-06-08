@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# production build
+build/
+
+# environment variables - NEVER commit this
+.env
+.env.local
+.env.production
+
+# misc
+.DS_Store
+*.log

@@ -314,14 +314,52 @@ export default function App() {
   if (screen === "confirm" && pendingDay) {
     const day = pendingDay;
     return (
-      <div style={{ minHeight: "100vh", background: "#020408", fontFamily: "'Courier New', monospace", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 24px", backgroundImage: `radial-gradient(ellipse at 50% 40%, ${day.glow} 0%, transparent 60%)` }}>
+      <div style={{ minHeight: "100vh", background: "#020408", fontFamily: "'Courier New', monospace", color: "#fff", paddingBottom: 48, backgroundImage: `radial-gradient(ellipse at 50% 0%, ${day.glow} 0%, transparent 50%)` }}>
         <Scanline />
-        <div style={{ fontSize: 9, letterSpacing: 6, color: day.color, marginBottom: 16, textShadow: `0 0 10px ${day.color}` }}>SEMANA {protocol.week} · PROTOCOLO {day.id}</div>
-        <div style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1, textAlign: "center", marginBottom: 6, lineHeight: 1.1 }}>{day.emoji}<br />{day.name}</div>
-        <div style={{ fontSize: 10, color: "#ffffff33", letterSpacing: 3, marginBottom: 48 }}>{totalSets(day)} SERIES · ~60 MIN</div>
-        <div style={{ width: "100%", maxWidth: 320, display: "flex", flexDirection: "column", gap: 12 }}>
+
+        {/* Header */}
+        <div style={{ padding: "36px 20px 20px", borderBottom: `1px solid ${day.color}22` }}>
+          <div style={{ fontSize: 9, letterSpacing: 6, color: day.color, marginBottom: 6, textShadow: `0 0 10px ${day.color}` }}>SEMANA {protocol.week} · PROTOCOLO {day.id}</div>
+          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: -1, lineHeight: 1.1 }}>{day.emoji} {day.name}</div>
+          <div style={{ fontSize: 9, color: "#ffffff33", marginTop: 6, letterSpacing: 3 }}>{totalSets(day)} SERIES · ~60 MIN · REVISA ANTES DE EMPEZAR</div>
+        </div>
+
+        {/* Exercise preview by block */}
+        <div style={{ padding: "16px 16px 0" }}>
+          {day.blocks.map((block, bi) => (
+            <div key={bi} style={{ marginBottom: 18 }}>
+              {/* Block title */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, paddingBottom: 5, borderBottom: `1px solid ${day.color}1a` }}>
+                <div style={{ fontSize: 7, letterSpacing: 2, padding: "2px 6px", background: `${day.color}18`, border: `1px solid ${day.color}33`, color: day.color }}>
+                  {typeTag[block.type] || "MOD"}
+                </div>
+                <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: 2, color: "#ffffff55" }}>{block.name}</div>
+              </div>
+              {block.note && (
+                <div style={{ fontSize: 8, color: "#ffffff22", marginBottom: 6, letterSpacing: 1.5 }}>{block.note}</div>
+              )}
+
+              {/* Exercises */}
+              {block.exercises.map((ex, ei) => (
+                <div key={ei} style={{ marginBottom: 6, background: "#ffffff04", border: `1px solid #ffffff08`, borderLeft: `2px solid ${day.color}33`, padding: "8px 12px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: ex.name.includes("⚠️") ? "#FFD600" : "#ffffffbb", marginBottom: 5 }}>{ex.name}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                    {ex.sets.map((set, si) => (
+                      <div key={si} style={{ fontSize: 9, padding: "3px 8px", border: `1px solid ${day.color}33`, color: day.color, letterSpacing: 1 }}>
+                        S{si + 1} · {typeof set.reps === "number" ? `${set.reps}r` : set.reps}{set.weight ? ` · ${set.weight}kg` : ""}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Buttons — sticky at bottom */}
+        <div style={{ position: "sticky", bottom: 0, background: "#020408f0", padding: "16px", borderTop: `1px solid ${day.color}22`, display: "flex", flexDirection: "column", gap: 10, backdropFilter: "blur(8px)" }}>
           <button onClick={handleStart} style={{ ...btnBase, background: day.color, borderColor: day.color, color: "#000", boxShadow: `0 0 30px ${day.color}55` }}>▶ INICIAR PROTOCOLO</button>
-          <button onClick={handleExit} style={{ ...btnBase, background: "transparent", borderColor: "#ffffff22", color: "#ffffff44" }}>← VOLVER</button>
+          <button onClick={handleExit} style={{ ...btnBase, background: "transparent", borderColor: "#ffffff22", color: "#ffffff44", padding: "10px 0" }}>← VOLVER</button>
         </div>
       </div>
     );

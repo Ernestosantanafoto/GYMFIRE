@@ -329,7 +329,7 @@ export default function App() {
         )}
 
         {/* Sticky header */}
-        <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#020408f0", borderBottom: `1px solid ${day.color}44`, padding: "14px 16px 10px", backdropFilter: "blur(8px)" }}>
+        <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#020408f0", borderBottom: `1px solid ${day.color}44`, padding: "12px 16px 10px", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
             <div>
               <div style={{ fontSize: 8, letterSpacing: 4, color: day.color, marginBottom: 3 }}>S{protocol.week} · PROTOCOLO {day.id}</div>
@@ -340,10 +340,17 @@ export default function App() {
               <div style={{ fontSize: 9, color: "#ffffff33", letterSpacing: 2 }}>{done}/{total}</div>
             </div>
           </div>
-          <div style={{ height: 2, background: "#ffffff0a" }}>
+          <div style={{ height: 2, background: "#ffffff0a", marginBottom: 8 }}>
             <div style={{ height: "100%", width: `${pct}%`, background: `linear-gradient(90deg, ${day.color}88, ${day.color})`, boxShadow: `0 0 8px ${day.color}`, transition: "width 0.4s" }} />
           </div>
-          <div style={{ fontSize: 8, color: `${day.color}77`, letterSpacing: 3, marginTop: 4 }}>{pct}% COMPLETADO</div>
+          {/* Rest buttons — always visible in header */}
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <div style={{ fontSize: 7, letterSpacing: 2, color: "#ffffff18", marginRight: 2 }}>DESC.</div>
+            {[60, 90, 120].map(s => (
+              <button key={s} onClick={() => startRest(s)} style={{ flex: 1, padding: "6px 0", background: "transparent", border: `1px solid ${day.color}33`, color: day.color, fontSize: 10, fontFamily: "inherit", letterSpacing: 2, cursor: "pointer", fontWeight: 700 }}>{s}s</button>
+            ))}
+            <div style={{ fontSize: 8, color: `${day.color}66`, letterSpacing: 2, marginLeft: 4 }}>{pct}%</div>
+          </div>
         </div>
 
         <div style={{ padding: "16px 14px 0" }}>
@@ -426,16 +433,6 @@ export default function App() {
               </div>
             );
           })}
-
-          {/* Manual rest */}
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 8, letterSpacing: 3, color: "#ffffff18", marginBottom: 7 }}>DESCANSO MANUAL</div>
-            <div style={{ display: "flex", gap: 8 }}>
-              {[60, 90, 120].map(s => (
-                <button key={s} onClick={() => startRest(s)} style={{ flex: 1, padding: "10px 0", background: "transparent", border: `1px solid ${day.color}2a`, color: day.color, fontSize: 10, fontFamily: "inherit", letterSpacing: 2, cursor: "pointer" }}>{s}s</button>
-              ))}
-            </div>
-          </div>
 
           {/* Observations */}
           <div style={{ marginBottom: 14 }}>

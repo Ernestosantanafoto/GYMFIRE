@@ -366,35 +366,51 @@ export default function App() {
                     {ex.sets.map((set, si) => {
                       const key = `${bi}-${ei}-${si}`;
                       const isDone = completed[key];
+                      const hasCorrection = realReps[key] || realWeights[key];
                       return (
-                        <div key={si} style={{ padding: "8px 12px", borderBottom: si < ex.sets.length - 1 ? "1px solid #ffffff05" : "none", background: isDone ? `${day.color}07` : "transparent" }}>
-                          {/* Row 1: check + serie + reps ref + peso ref */}
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: isDone ? 0 : 6 }}>
-                            <button onClick={() => toggleSet(key)} style={{ width: 28, height: 28, flexShrink: 0, background: isDone ? day.color : "transparent", border: `1px solid ${isDone ? day.color : "#ffffff1a"}`, color: isDone ? "#000" : "#ffffff33", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "inherit", boxShadow: isDone ? `0 0 10px ${day.color}` : "none", transition: "all 0.15s" }}>
-                              {isDone ? "✓" : ""}
-                            </button>
-                            <div style={{ fontSize: 8, color: "#ffffff1a", width: 14 }}>S{si + 1}</div>
-                            <div style={{ fontSize: 10, color: "#ffffff44" }}>
-                              {typeof set.reps === "number" ? `${set.reps}r` : set.reps}
-                              {set.weight ? ` · ${set.weight}kg ref` : ""}
+                        <div key={si} style={{ padding: "10px 12px", borderBottom: si < ex.sets.length - 1 ? "1px solid #ffffff05" : "none", background: isDone ? `${day.color}07` : "transparent", display: "flex", alignItems: "center", gap: 12 }}>
+
+                          {/* LEFT: serie + propuesta + corrección opcional */}
+                          <div style={{ flex: 1 }}>
+
+                            {/* Serie label + propuesta en grande */}
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: hasCorrection || !isDone ? 8 : 0 }}>
+                              <div style={{ fontSize: 8, color: "#ffffff22", letterSpacing: 1, minWidth: 16 }}>S{si + 1}</div>
+                              <div style={{ fontSize: 15, fontWeight: 900, letterSpacing: 0.5, color: isDone && !hasCorrection ? `${day.color}66` : isDone ? "#ffffff44" : "#ffffffdd", textDecoration: isDone && !hasCorrection ? "none" : isDone ? "line-through" : "none" }}>
+                                {typeof set.reps === "number" ? `${set.reps} reps` : set.reps}
+                                {set.weight ? <span style={{ color: isDone && !hasCorrection ? `${day.color}88` : isDone ? "#ffffff33" : day.color, fontSize: 13 }}> · {set.weight} kg</span> : ""}
+                              </div>
+                              {set.note && <div style={{ fontSize: 8, color: "#FFD60077" }}>{set.note}</div>}
                             </div>
-                            {set.note && <div style={{ fontSize: 8, color: "#FFD60077" }}>{set.note}</div>}
-                          </div>
-                          {/* Row 2: real inputs — always visible */}
-                          <div style={{ display: "flex", gap: 8, paddingLeft: 36, marginTop: 4 }}>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <div style={{ fontSize: 7, color: "#ffffff22", letterSpacing: 1 }}>REPS REAL</div>
-                              <input type="number" inputMode="numeric" placeholder="—" value={realReps[key] || ""} onChange={(e) => setRealReps(prev => ({ ...prev, [key]: e.target.value }))}
-                                style={{ width: 56, padding: "5px 8px", background: "#ffffff07", border: `1px solid ${realReps[key] ? day.color + "77" : "#ffffff0f"}`, color: realReps[key] ? day.color : "#ffffff33", fontSize: 13, fontFamily: "inherit", textAlign: "center", outline: "none", borderRadius: 2, fontWeight: 700 }} />
-                            </div>
-                            {set.weight !== null && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                                <div style={{ fontSize: 7, color: "#ffffff22", letterSpacing: 1 }}>PESO REAL (kg)</div>
-                                <input type="number" inputMode="decimal" placeholder="—" value={realWeights[key] || ""} onChange={(e) => setRealWeights(prev => ({ ...prev, [key]: e.target.value }))}
-                                  style={{ width: 72, padding: "5px 8px", background: "#ffffff07", border: `1px solid ${realWeights[key] ? day.color + "77" : "#ffffff0f"}`, color: realWeights[key] ? day.color : "#ffffff33", fontSize: 13, fontFamily: "inherit", textAlign: "center", outline: "none", borderRadius: 2, fontWeight: 700 }} />
+
+                            {/* Corrección opcional — solo si no está done, o si tiene algo escrito */}
+                            {(!isDone || hasCorrection) && (
+                              <div style={{ display: "flex", gap: 8, paddingLeft: 24 }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                  <div style={{ fontSize: 7, color: "#ffffff22", letterSpacing: 1 }}>REPS REALES</div>
+                                  <input type="number" inputMode="numeric" placeholder={typeof set.reps === "number" ? `${set.reps}` : "—"}
+                                    value={realReps[key] || ""}
+                                    onChange={(e) => setRealReps(prev => ({ ...prev, [key]: e.target.value }))}
+                                    style={{ width: 62, padding: "5px 8px", background: "#ffffff06", border: `1px solid ${realReps[key] ? "#FFD60099" : "#ffffff11"}`, color: realReps[key] ? "#FFD600" : "#ffffff33", fontSize: 13, fontFamily: "inherit", textAlign: "center", outline: "none", borderRadius: 2, fontWeight: 700 }} />
+                                </div>
+                                {set.weight !== null && (
+                                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                    <div style={{ fontSize: 7, color: "#ffffff22", letterSpacing: 1 }}>KG REALES</div>
+                                    <input type="number" inputMode="decimal" placeholder={set.weight ? `${set.weight}` : "—"}
+                                      value={realWeights[key] || ""}
+                                      onChange={(e) => setRealWeights(prev => ({ ...prev, [key]: e.target.value }))}
+                                      style={{ width: 70, padding: "5px 8px", background: "#ffffff06", border: `1px solid ${realWeights[key] ? "#FFD60099" : "#ffffff11"}`, color: realWeights[key] ? "#FFD600" : "#ffffff33", fontSize: 13, fontFamily: "inherit", textAlign: "center", outline: "none", borderRadius: 2, fontWeight: 700 }} />
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
+
+                          {/* RIGHT: check button */}
+                          <button onClick={() => toggleSet(key)} style={{ width: 38, height: 38, flexShrink: 0, background: isDone ? day.color : "transparent", border: `2px solid ${isDone ? day.color : "#ffffff18"}`, color: isDone ? "#000" : "#ffffff22", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "inherit", boxShadow: isDone ? `0 0 12px ${day.color}` : "none", transition: "all 0.15s", borderRadius: 2 }}>
+                            {isDone ? "✓" : ""}
+                          </button>
+
                         </div>
                       );
                     })}
